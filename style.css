@@ -2,3 +2,71 @@
 @media(max-width:850px){.site-header{padding:0 20px}.nav{gap:16px}.hero{grid-template-columns:1fr 1fr;padding-left:24px;padding-right:24px}.hero h1{font-size:58px}.hero-visual{height:430px}.hero-portrait{height:420px}.hero-stats{left:24px}.stat-card{width:145px}.section{padding-left:24px;padding-right:24px}.gallery{grid-template-columns:repeat(2,1fr)}.tag-motion{right:-4px}.about-grid{gap:30px}.section-index{display:none}}
 @media(max-width:620px){.site-header{height:66px}.menu-toggle{display:block}.nav{display:none;position:absolute;top:65px;left:0;right:0;padding:20px;background:#081a35;flex-direction:column;gap:18px;border-bottom:1px solid #25476e}.nav.open{display:flex}.nav-cta{display:none}.hero{display:flex;flex-direction:column;align-items:stretch;padding-top:55px;min-height:auto}.hero-copy{padding-bottom:0}.hero h1{font-size:56px}.hero-visual{height:390px;margin-top:10px}.hero-portrait{height:390px}.hero-stats{position:relative;left:auto;bottom:auto;display:grid;grid-template-columns:1fr;gap:8px;margin-top:-4px}.stat-card{width:100%;min-height:58px}.tag-design{left:0}.tag-motion{right:0}.availability{right:0}.section{padding:75px 20px}.section-heading{align-items:flex-start}.section h2{font-size:36px}.gallery{grid-template-columns:1fr}.project-media{height:230px}.about-grid,.journey-grid,.community-grid{grid-template-columns:1fr}.about-photo{max-width:300px;margin:auto;width:100%}.resume-panel{padding:30px 24px}.resume-art{display:none}.resume-download{display:block;margin:14px 0 0}.contact-section h2{font-size:42px}.contact-links{flex-direction:column;align-items:center;gap:15px}footer{padding:22px 20px;gap:15px;flex-wrap:wrap}footer>span{order:3;width:100%}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* MOBILE HERO OVERLAP FIX */
+@media (max-width: 620px) {
+  .hero {
+    overflow: hidden;
+    padding-top: 42px;
+    padding-bottom: 55px;
+  }
+
+  .hero-visual {
+    width: 100%;
+    height: clamp(330px, 105vw, 410px);
+    margin-top: 22px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .hero-portrait {
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
+  .availability {
+    top: 12px;
+    right: 0;
+  }
+
+  .tag-design {
+    top: 43%;
+    left: 0;
+  }
+
+  .tag-motion {
+    top: 62%;
+    right: 0;
+  }
+
+  .tag-tools {
+    right: 0;
+    bottom: 12px;
+    width: 118px;
+  }
+
+  .float-tag {
+    padding: 8px 10px;
+    font-size: 8px;
+  }
+
+  .hero-stats {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 22px 0 0;
+  }
+
+  .stat-card {
+    width: 100%;
+    min-height: 64px;
+  }
+}
