@@ -54,19 +54,17 @@ const serviceCards = [...document.querySelectorAll(".hero-stats .stat-card")];
 let currentService = null;
 
 /* =========================================
-   GALLERY NAVIGATION
+   GALLERY TOOLBAR
 ========================================= */
 
-// Create gallery toolbar and Back to Services button.
 const toolbar = document.createElement("div");
 toolbar.className = "gallery-toolbar";
+
 toolbar.innerHTML = `
   <button class="back-to-services" id="back-to-services" type="button">
     ← Back to Services
   </button>
-  <p class="gallery-current" id="gallery-current">
-    All Creative Work
-  </p>
+  <p class="gallery-current" id="gallery-current">All Creative Work</p>
 `;
 
 gallery.parentNode.insertBefore(toolbar, gallery);
@@ -74,100 +72,91 @@ gallery.parentNode.insertBefore(toolbar, gallery);
 const backButton = document.querySelector("#back-to-services");
 const galleryTitle = document.querySelector("#gallery-current");
 
-// Render projects.
+/* =========================================
+   PROJECT CARD TEMPLATE
+========================================= */
+
+function createProjectCard(project) {
+  return `
+    <article class="project-card">
+      <div class="project-media">
+        ${
+          project.type === "video"
+            ? `<video
+                src="${project.src}"
+                controls
+                preload="metadata"
+                playsinline
+                aria-label="${project.title}">
+              </video>`
+            : `<img
+                src="${project.src}"
+                loading="lazy"
+                alt="${project.title}">`
+        }
+
+        <button
+          class="project-open"
+          type="button"
+          data-open="${project.src}"
+          data-type="${project.type}">
+          Open ↗
+        </button>
+      </div>
+
+      <div class="project-info">
+        <small>${labels[project.category]}</small>
+        <h3>${project.title}</h3>
+      </div>
+    </article>
+  `;
+}
+
+/* =========================================
+   RENDER GALLERY
+========================================= */
+
+function renderProjects(list) {
+  if (!list.length) {
+    gallery.innerHTML = `
+      <p class="empty-state">No projects found.</p>
+    `;
+    return;
+  }
+
+  gallery.innerHTML = list.map(createProjectCard).join("");
+}
+
 function renderGallery(filter = "all") {
   const list = projects.filter(project =>
     filter === "all" || project.category === filter
   );
 
-  gallery.innerHTML = list.map(project => `
-    <article class="project-card">
-      <div class="project-media">
-
-        ${
-          project.type === "video"
-            ? `<video
-                src="${project.src}"
-                controls
-                preload="metadata"
-                playsinline
-                aria-label="${project.title}">
-              </video>`
-            : `<img
-                src="${project.src}"
-                loading="lazy"
-                alt="${project.title}">`
-        }
-
-        <button
-          class="project-open"
-          type="button"
-          data-open="${project.src}"
-          data-type="${project.type}">
-          Open ↗
-        </button>
-
-      </div>
-
-      <div class="project-info">
-        <small>${labels[project.category]}</small>
-        <h3>${project.title}</h3>
-      </div>
-    </article>
-  `).join("");
+  renderProjects(list);
 }
 
-// Render multiple categories for a selected service.
 function renderServiceGallery(categories) {
   const list = projects.filter(project =>
     categories.includes(project.category)
   );
 
-  gallery.innerHTML = list.map(project => `
-    <article class="project-card">
-      <div class="project-media">
-
-        ${
-          project.type === "video"
-            ? `<video
-                src="${project.src}"
-                controls
-                preload="metadata"
-                playsinline
-                aria-label="${project.title}">
-              </video>`
-            : `<img
-                src="${project.src}"
-                loading="lazy"
-                alt="${project.title}">`
-        }
-
-        <button
-          class="project-open"
-          type="button"
-          data-open="${project.src}"
-          data-type="${project.type}">
-          Open ↗
-        </button>
-
-      </div>
-
-      <div class="project-info">
-        <small>${labels[project.category]}</small>
-        <h3>${project.title}</h3>
-      </div>
-    </article>
-  `).join("");
+  renderProjects(list);
 }
 
-// Show selected service projects.
+/* =========================================
+   OPEN SELECTED SERVICE
+========================================= */
+
 function openService(serviceKey) {
   const service = services[serviceKey];
+
   if (!service) return;
 
   currentService = serviceKey;
 
   galleryTitle.textContent = service.title;
+
+  toolbar.classList.add("service-gallery-active");
 
   document.querySelectorAll(".filter").forEach(button => {
     button.classList.remove("active");
@@ -181,11 +170,16 @@ function openService(serviceKey) {
   });
 }
 
-// Back to Services.
+/* =========================================
+   BACK TO SERVICES
+========================================= */
+
 backButton.addEventListener("click", () => {
   currentService = null;
 
   galleryTitle.textContent = "All Creative Work";
+
+  toolbar.classList.remove("service-gallery-active");
 
   renderGallery("all");
 
@@ -239,8 +233,9 @@ serviceCards.forEach((card, index) => {
 
 document.querySelectorAll(".filter").forEach(button => {
   button.addEventListener("click", () => {
-
     currentService = null;
+
+    toolbar.classList.remove("service-gallery-active");
 
     document.querySelectorAll(".filter").forEach(item => {
       item.classList.remove("active");
@@ -289,7 +284,7 @@ gallery.addEventListener("click", event => {
 });
 
 /* =========================================
-   SKILL CHIP & ADOBE ICON TOUCH EFFECT
+   SKILL CHIP & ADOBE ICON EFFECT
 ========================================= */
 
 document.querySelectorAll(
@@ -532,3 +527,9 @@ document.querySelector("#comment-form").addEventListener(
     }
   }
 );
+
+/* =========================================
+   INITIAL GALLERY
+========================================= */
+
+renderGallery("all");
