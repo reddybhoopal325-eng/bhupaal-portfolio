@@ -269,3 +269,112 @@
   }
 }
 
+/* ========================================
+   POLISHED PORTFOLIO ANIMATIONS
+   Scroll reveal is activated by the updated script.js.
+======================================== */
+
+/* Gentle page entrance */
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes heroTextIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes portraitFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes softGlow {
+  0%, 100% { opacity: .65; transform: scale(.96); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes tagFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes cardRise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+body { animation: pageFadeIn .7s ease both; }
+.hero-copy > * { animation: heroTextIn .7s ease both; }
+.hero-copy > *:nth-child(1) { animation-delay: .08s; }
+.hero-copy > *:nth-child(2) { animation-delay: .16s; }
+.hero-copy > *:nth-child(3) { animation-delay: .24s; }
+.hero-copy > *:nth-child(4) { animation-delay: .32s; }
+.hero-copy > *:nth-child(5) { animation-delay: .4s; }
+.hero-portrait { animation: heroTextIn .9s ease both, portraitFloat 6s ease-in-out 1s infinite; }
+.portrait-glow { animation: softGlow 5s ease-in-out infinite; }
+.tag-design { animation: tagFloat 5s ease-in-out 1s infinite; }
+.tag-motion { animation: tagFloat 5.5s ease-in-out 1.5s infinite; }
+.availability { animation: heroTextIn .8s ease .5s both; }
+.orbit-one { animation: orbitTurn 24s linear infinite; }
+.orbit-two { animation: orbitTurn 30s linear infinite reverse; }
+@keyframes orbitTurn { to { rotate: 360deg; } }
+
+/* Project cards enter with a subtle stagger whenever the gallery renders */
+.project-card { animation: cardRise .55s cubic-bezier(.2,.7,.2,1) both; }
+.project-card:nth-child(2) { animation-delay: .06s; }
+.project-card:nth-child(3) { animation-delay: .12s; }
+.project-card:nth-child(4) { animation-delay: .18s; }
+.project-card:nth-child(5) { animation-delay: .24s; }
+.project-card:nth-child(6) { animation-delay: .30s; }
+.project-card:nth-child(n+7) { animation-delay: .34s; }
+.project-media img, .project-media video { transition: transform .65s cubic-bezier(.2,.7,.2,1), filter .4s ease; }
+.project-card:hover .project-media img,
+.project-card:hover .project-media video { transform: scale(1.045); }
+.project-info h3 { transition: color .25s ease; }
+.project-card:hover .project-info h3 { color: #8bcaff; }
+
+/* Smooth interactive feedback */
+.filter, .like-button, .contact-links a, .contact-links span,
+.nav-cta, .back-to-services { transition: color .25s ease, background .25s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
+.filter:hover { transform: translateY(-2px); }
+.like-button { transition: transform .2s ease, background .25s ease, box-shadow .25s ease; }
+.like-button:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255,108,167,.12); }
+.contact-links a:hover { color: #70bfff; border-color: #70bfff; }
+.about-photo { transition: transform .4s ease, box-shadow .4s ease; }
+.about-photo:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(27,117,237,.15); }
+.journey-card, .engagement-card, .comments-card { transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+.journey-card:hover, .engagement-card:hover, .comments-card:hover { transform: translateY(-4px); border-color: rgba(96,174,255,.38); box-shadow: 0 14px 32px rgba(0,0,0,.14); }
+
+/* Scroll reveal classes: script.js will add .is-visible as sections enter view */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal.reveal-left { transform: translateX(-28px); }
+.reveal.reveal-left.is-visible { transform: translateX(0); }
+.reveal.reveal-right { transform: translateX(28px); }
+.reveal.reveal-right.is-visible { transform: translateX(0); }
+
+/* Keep animation comfortable on smaller screens */
+@media (max-width: 620px) {
+  .hero-portrait { animation: heroTextIn .8s ease both, portraitFloat 7s ease-in-out 1s infinite; }
+  .tag-design, .tag-motion { animation-duration: 6s; }
+  .project-card:hover { transform: translateY(-2px); }
+  .journey-card:hover, .engagement-card:hover, .comments-card:hover { transform: none; }
+  .reveal { transform: translateY(18px); }
+  .reveal.reveal-left, .reveal.reveal-right { transform: translateY(18px); }
+  .reveal.reveal-left.is-visible, .reveal.reveal-right.is-visible { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body, .hero-copy > *, .hero-portrait, .portrait-glow, .tag-design,
+  .tag-motion, .availability, .orbit-one, .orbit-two, .project-card {
+    animation: none !important;
+  }
+  .reveal, .reveal.reveal-left, .reveal.reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .project-media img, .project-media video { transition: none !important; }
+}
