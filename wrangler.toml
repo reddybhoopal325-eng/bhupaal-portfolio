@@ -1,10 +1,9 @@
+
 name = "bhupaal-portfolio"
 compatibility_date = "2026-11-11"
 pages_build_output_dir = "."
 
-# Create a Cloudflare D1 database named bhupaal-portfolio-db.
-# Replace the database_id below with the ID from your Cloudflare dashboard.
 [[d1_databases]]
 binding = "DB"
 database_name = "bhupaal-portfolio-db"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "170c6d7a-4ff4-40ff-ab26-3dad5889abd8"
