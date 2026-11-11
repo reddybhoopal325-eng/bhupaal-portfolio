@@ -50,6 +50,7 @@ const services = {
 const gallery = document.querySelector("#gallery");
 const workSection = document.querySelector("#work");
 const serviceCards = [...document.querySelectorAll(".hero-stats .stat-card")];
+const filterBar = document.querySelector(".filters");
 
 let currentService = null;
 
@@ -157,6 +158,12 @@ function openService(serviceKey) {
   galleryTitle.textContent = service.title;
 
   toolbar.classList.add("service-gallery-active");
+  workSection.classList.add("service-gallery-active");
+
+  // Hide software filters while viewing a service
+  if (filterBar) {
+    filterBar.style.display = "none";
+  }
 
   document.querySelectorAll(".filter").forEach(button => {
     button.classList.remove("active");
@@ -180,6 +187,12 @@ backButton.addEventListener("click", () => {
   galleryTitle.textContent = "All Creative Work";
 
   toolbar.classList.remove("service-gallery-active");
+  workSection.classList.remove("service-gallery-active");
+
+  // Restore software filters
+  if (filterBar) {
+    filterBar.style.display = "flex";
+  }
 
   renderGallery("all");
 
@@ -236,6 +249,12 @@ document.querySelectorAll(".filter").forEach(button => {
     currentService = null;
 
     toolbar.classList.remove("service-gallery-active");
+    workSection.classList.remove("service-gallery-active");
+
+    // Show filters again
+    if (filterBar) {
+      filterBar.style.display = "flex";
+    }
 
     document.querySelectorAll(".filter").forEach(item => {
       item.classList.remove("active");
