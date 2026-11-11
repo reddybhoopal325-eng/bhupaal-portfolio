@@ -552,3 +552,184 @@ document.querySelector("#comment-form").addEventListener(
 ========================================= */
 
 renderGallery("all");
+
+/* =========================================
+   PROFESSIONAL SCROLL REVEAL ANIMATIONS
+========================================= */
+
+(() => {
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (reduceMotion) return;
+
+  // Sections that animate when they enter the screen
+  const selectors = [
+    ".hero-copy",
+    ".hero-visual",
+    ".hero-stats",
+    ".section-heading",
+    ".about-grid",
+    ".journey-grid",
+    ".resume-panel",
+    ".community-grid",
+    ".contact-section",
+    "footer"
+  ];
+
+  const elements = document.querySelectorAll(selectors.join(", "));
+
+  elements.forEach(element => {
+    element.classList.add("scroll-reveal");
+
+    if (element.matches(".hero-copy")) {
+      element.classList.add("reveal-left");
+    }
+
+    if (element.matches(".hero-visual")) {
+      element.classList.add("reveal-right");
+    }
+  });
+
+  // Reveal sections while scrolling
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: "0px 0px -40px 0px"
+    });
+
+    elements.forEach(element => observer.observe(element));
+  } else {
+    elements.forEach(element => {
+      element.classList.add("is-visible");
+    });
+  }
+
+  // Animate project cards after every gallery update
+  function animateProjects() {
+    gallery.querySelectorAll(".project-card").forEach((card, index) => {
+      card.style.setProperty(
+        "--card-delay",
+        `${Math.min(index, 8) * 65}ms`
+      );
+
+      card.classList.remove("project-enter");
+      void card.offsetWidth;
+      card.classList.add("project-enter");
+    });
+  }
+
+  if ("MutationObserver" in window && gallery) {
+    const galleryObserver = new MutationObserver(animateProjects);
+
+    galleryObserver.observe(gallery, {
+      childList: true
+    });
+  }
+
+  animateProjects();
+
+  // Gentle portrait floating effect
+  const portrait = document.querySelector(".hero-portrait");
+  const glow = document.querySelector(".portrait-glow");
+
+  if (portrait) portrait.classList.add("portrait-float");
+  if (glow) glow.classList.add("glow-pulse");
+})();
+
+/* =========================================
+   PROFESSIONAL PORTFOLIO ANIMATIONS
+========================================= */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.scroll-reveal.reveal-left {
+  transform: translateX(-40px);
+}
+
+.scroll-reveal.reveal-right {
+  transform: translateX(40px);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Project card entrance */
+.project-card.project-enter {
+  animation: projectEntrance .65s cubic-bezier(.2,.7,.2,1)
+    var(--card-delay, 0ms) both;
+}
+
+@keyframes projectEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Floating portrait */
+.portrait-float {
+  animation: portraitFloat 5s ease-in-out infinite;
+}
+
+@keyframes portraitFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* Soft portrait glow */
+.glow-pulse {
+  animation: glowPulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from {
+    opacity: .65;
+    transform: scale(.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .project-card.project-enter,
+  .portrait-float,
+  .glow-pulse {
+    animation: none !important;
+  }
+}
+
