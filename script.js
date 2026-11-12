@@ -645,4 +645,76 @@ renderGallery("all");
   if (glow) glow.classList.add("glow-pulse");
 })();
 
+/* =====================================
+   INTERACTIVE 3D MOUSE PORTRAIT
+===================================== */
+
+(() => {
+  const visual = document.querySelector(".hero-visual");
+  const portrait = document.querySelector(".hero-portrait");
+
+  if (!visual || !portrait) return;
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+  const finePointer = window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+  );
+
+  if (reduceMotion.matches || !finePointer.matches) return;
+
+  let frame = null;
+  let targetX = 0;
+  let targetY = 0;
+
+  function updateTilt(event) {
+    const rect = visual.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    targetY = (x - 0.5) * 12;
+    targetX = (0.5 - y) * 8;
+
+    if (frame) return;
+
+    frame = requestAnimationFrame(() => {
+      portrait.style.setProperty("--tilt-x", `${targetX}deg`);
+      portrait.style.setProperty("--tilt-y", `${targetY}deg`);
+
+      portrait.style.setProperty(
+        "--shadow-x",
+        `${targetY * 1.5}px`
+      );
+
+      portrait.style.setProperty(
+        "--shadow-y",
+        `${15 - targetX}px`
+      );
+
+      frame = null;
+    });
+  }
+
+  function resetTilt() {
+    targetX = 0;
+    targetY = 0;
+
+    portrait.style.setProperty("--tilt-x", "0deg");
+    portrait.style.setProperty("--tilt-y", "0deg");
+    portrait.style.setProperty("--shadow-x", "0px");
+    portrait.style.setProperty("--shadow-y", "15px");
+  }
+
+  visual.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") return;
+    updateTilt(event);
+  });
+
+  visual.addEventListener("pointerleave", resetTilt);
+})();
+
+
 
