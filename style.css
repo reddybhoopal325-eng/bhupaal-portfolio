@@ -519,3 +519,94 @@ body { animation: pageFadeIn .7s ease both; }
   }
 }
 
+/* =====================================
+   PORTRAIT + BACKGROUND ANIMATION FIX
+===================================== */
+
+/* Keep the portrait animated */
+.hero-visual {
+  isolation: isolate;
+}
+
+.hero-portrait {
+  position: relative;
+  z-index: 3 !important;
+  animation: portraitFloat 6s ease-in-out infinite !important;
+  transform-origin: center bottom;
+}
+
+/* Gentle floating movement of portrait */
+@keyframes portraitFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+/* Background lines stay behind portrait */
+.orbit {
+  z-index: 0 !important;
+  pointer-events: none;
+}
+
+.orbit-one {
+  animation: orbitOneMove 28s linear infinite !important;
+}
+
+.orbit-two {
+  animation: orbitTwoMove 36s linear infinite !important;
+}
+
+@keyframes orbitOneMove {
+  from { transform: rotate(-24deg); }
+  to { transform: rotate(336deg); }
+}
+
+@keyframes orbitTwoMove {
+  from { transform: rotate(45deg); }
+  to { transform: rotate(405deg); }
+}
+
+/* Glow stays behind portrait */
+.portrait-glow {
+  z-index: 1;
+  animation: softGlow 5s ease-in-out infinite !important;
+}
+
+/* Floating labels stay above background */
+.float-tag,
+.availability {
+  z-index: 4 !important;
+}
+
+/* Smooth label movement */
+.tag-design {
+  animation: tagFloat 5s ease-in-out infinite !important;
+}
+
+.tag-motion {
+  animation: tagFloat 6s ease-in-out infinite !important;
+}
+
+/* Mobile support */
+@media (max-width: 620px) {
+  .hero-portrait {
+    animation: portraitFloat 6s ease-in-out infinite !important;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .hero-portrait,
+  .orbit-one,
+  .orbit-two,
+  .portrait-glow,
+  .tag-design,
+  .tag-motion {
+    animation: none !important;
+  }
+}
+
+
