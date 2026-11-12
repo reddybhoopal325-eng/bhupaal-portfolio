@@ -378,3 +378,144 @@ body { animation: pageFadeIn .7s ease both; }
   }
   .project-media img, .project-media video { transition: none !important; }
 }
+
+/* =========================================
+   BHUPAAL PORTFOLIO — SMOOTH ANIMATION FIX
+   Keep portrait stable and centred
+========================================= */
+
+/* Stop the portrait from moving up and down */
+.hero-portrait {
+  animation: portraitSmoothIn 1.2s ease-out both !important;
+  transform-origin: center bottom;
+  will-change: opacity, transform;
+}
+
+@keyframes portraitSmoothIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Gentle floating labels — never cover the face */
+.tag-design {
+  animation: labelFloatLeft 6s ease-in-out infinite !important;
+}
+
+.tag-motion {
+  animation: labelFloatRight 7s ease-in-out infinite !important;
+}
+
+.tag-tools {
+  animation: toolsGlow 4s ease-in-out infinite !important;
+}
+
+@keyframes labelFloatLeft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes labelFloatRight {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+@keyframes toolsGlow {
+  0%, 100% {
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  }
+  50% {
+    box-shadow: 0 10px 30px rgba(65,150,255,.25);
+  }
+}
+
+/* Smooth availability badge */
+.availability {
+  animation: availabilityPulse 4s ease-in-out infinite !important;
+}
+
+@keyframes availabilityPulse {
+  0%, 100% { border-color: rgba(100,171,255,.45); }
+  50% { border-color: rgba(101,232,166,.8); }
+}
+
+/* Beautiful background glow */
+.portrait-glow {
+  animation: glowPulse 6s ease-in-out infinite !important;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: .65;
+    transform: scale(.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+/* Slow rotating decorative orbits */
+.orbit-one {
+  animation: orbitSmooth 35s linear infinite !important;
+}
+
+.orbit-two {
+  animation: orbitSmooth 45s linear infinite reverse !important;
+}
+
+@keyframes orbitSmooth {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Professional hover animations on project cards */
+.project-card {
+  transition:
+    transform .4s ease,
+    border-color .4s ease,
+    box-shadow .4s ease !important;
+}
+
+.project-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(96,174,255,.65);
+  box-shadow: 0 18px 40px rgba(30,110,220,.18);
+}
+
+/* Smooth buttons */
+.btn,
+.nav-cta,
+.filter,
+.like-button {
+  transition: all .3s ease !important;
+}
+
+.btn:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Adobe icons gently respond */
+.tool-logo:hover {
+  transform: translateY(-5px) scale(1.08);
+}
+
+/* Respect visitors who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-portrait,
+  .tag-design,
+  .tag-motion,
+  .tag-tools,
+  .availability,
+  .portrait-glow,
+  .orbit-one,
+  .orbit-two {
+    animation: none !important;
+  }
+}
+
