@@ -609,4 +609,56 @@ body { animation: pageFadeIn .7s ease both; }
   }
 }
 
+/* INTERACTIVE 3D PORTRAIT */
+.hero-visual {
+  perspective: 1100px;
+  transform-style: preserve-3d;
+}
+
+.hero-portrait {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --float-y: 0px;
+  transform-style: preserve-3d;
+  transform:
+    translateY(var(--float-y))
+    rotateX(var(--tilt-x))
+    rotateY(var(--tilt-y))
+    translateZ(18px);
+  transition: filter .25s ease;
+  filter:
+    drop-shadow(
+      var(--shadow-x, 0px)
+      var(--shadow-y, 15px)
+      35px rgba(45, 125, 255, .30)
+    );
+  will-change: transform;
+}
+
+@keyframes portraitFloat {
+  0%, 100% { --float-y: 0px; }
+  50% { --float-y: -9px; }
+}
+
+.hero-visual {
+  transform-style: preserve-3d;
+}
+
+.portrait-glow {
+  transform: translateZ(-25px);
+}
+
+.orbit {
+  transform-style: preserve-3d;
+}
+
+/* Mobile: keep the gentle floating effect */
+@media (max-width: 620px) {
+  .hero-portrait {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+  }
+}
+
+
 
