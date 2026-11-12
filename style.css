@@ -660,5 +660,60 @@ body { animation: pageFadeIn .7s ease both; }
   }
 }
 
+/* FLOATING WHATSAPP CONTACT BUTTON */
+.whatsapp-float {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 19px;
+  border-radius: 50px;
+  background: #25D366;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(37,211,102,.35);
+  transition: .3s ease;
+  animation: whatsappEnter .8s ease both;
+}
+
+.whatsapp-float svg {
+  width: 26px;
+  height: 26px;
+}
+
+.whatsapp-float:hover {
+  transform: translateY(-5px) scale(1.04);
+  box-shadow: 0 12px 35px rgba(37,211,102,.5);
+}
+
+@keyframes whatsappEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:620px) {
+  .whatsapp-float {
+    right: 15px;
+    bottom: 18px;
+    padding: 13px;
+  }
+  .whatsapp-float span {
+    display: none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .whatsapp-float {
+    animation: none;
+    transition: none;
+  }
+}
+
+
 
 
