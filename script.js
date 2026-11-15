@@ -1,7 +1,7 @@
 
 /* =========================================
    BHUPAAL REDDY PORTFOLIO
-   Updated Gallery + Service Cards
+   Complete Gallery + Descriptions + Preview
 ========================================= */
 
 const projects = [
@@ -15,8 +15,8 @@ const projects = [
   {title:"Easy Food Logo",category:"illustrator",type:"image",src:"assets/works/illustrator/LOGO.jpg",description:"A simple brand identity concept created to give a food business a memorable and recognisable visual mark."},
   {title:"Tourism Poster",category:"illustrator",type:"image",src:"assets/works/illustrator/travel.jpg",description:"A travel-themed promotional poster that brings destination imagery and informative design together."},
   {title:"Travel Flyer",category:"illustrator",type:"image",src:"assets/works/illustrator/travel-flyer.webp",description:"A travel flyer layout presenting trip information in an attractive, organised and easy-to-read format."},
-  {title:"Visiting Card — Front",category:"illustrator",type:"image",src:"assets/works/illustrator/visiting%20card-01.jpg",description:"The front side of a professional business card, designed with clear branding and balanced typography."},
-  {title:"Visiting Card — Back",category:"illustrator",type:"image",src:"assets/works/illustrator/visiting%20card-02.jpg",description:"The reverse side of the business card, arranged to present contact and supporting details neatly."},
+  {title:"Visiting Card — Front",category:"illustrator",type:"image",src:"assets/works/illustrator/id-card-front.webp",description:"The front side of a professional business card, designed with clear branding and balanced typography."},
+  {title:"Visiting Card — Back",category:"illustrator",type:"image",src:"assets/works/illustrator/id-card-back.webp",description:"The reverse side of the business card, arranged to present contact and supporting details neatly."},
 
   // AFTER EFFECTS
   {title:"History of Animation",category:"after-effects",type:"video",src:"assets/works/after-effects/history-of-animation.mp4",description:"A motion-graphics video exploring the evolution of animation through timed visuals, titles and transitions."},
@@ -28,12 +28,20 @@ const projects = [
   {title:"Wedding Invitation",category:"premiere-pro",type:"video",src:"assets/works/premiere-pro/wedding-invitation.mp4",description:"A wedding invitation video edit designed to present the celebration details in a polished and memorable way."}
 ];
 
+/* =========================================
+   CATEGORY LABELS
+========================================= */
+
 const labels = {
   "photoshop": "Photoshop",
   "illustrator": "Illustrator",
   "after-effects": "After Effects",
   "premiere-pro": "Premiere Pro"
 };
+
+/* =========================================
+   SERVICES
+========================================= */
 
 const services = {
   "graphic-design": {
@@ -50,6 +58,10 @@ const services = {
   }
 };
 
+/* =========================================
+   MAIN ELEMENTS
+========================================= */
+
 const gallery = document.querySelector("#gallery");
 const workSection = document.querySelector("#work");
 const serviceCards = [...document.querySelectorAll(".hero-stats .stat-card")];
@@ -61,17 +73,19 @@ let currentService = null;
    GALLERY TOOLBAR
 ========================================= */
 
-const toolbar = document.createElement("div");
-toolbar.className = "gallery-toolbar";
+if (gallery && gallery.parentNode) {
+  const toolbar = document.createElement("div");
+  toolbar.className = "gallery-toolbar";
 
-toolbar.innerHTML = `
-  <button class="back-to-services" id="back-to-services" type="button">
-    ← Back to Services
-  </button>
-  <p class="gallery-current" id="gallery-current">All Creative Work</p>
-`;
+  toolbar.innerHTML = `
+    <button class="back-to-services" id="back-to-services" type="button">
+      ← Back to Services
+    </button>
+    <p class="gallery-current" id="gallery-current">All Creative Work</p>
+  `;
 
-gallery.parentNode.insertBefore(toolbar, gallery);
+  gallery.parentNode.insertBefore(toolbar, gallery);
+}
 
 const backButton = document.querySelector("#back-to-services");
 const galleryTitle = document.querySelector("#gallery-current");
@@ -96,7 +110,8 @@ function createProjectCard(project) {
             : `<img
                 src="${project.src}"
                 loading="lazy"
-                alt="${project.title}">`
+                alt="${project.title}"
+                onerror="this.style.opacity='0.25';">`
         }
 
         <button
@@ -111,7 +126,9 @@ function createProjectCard(project) {
       <div class="project-info">
         <small>${labels[project.category]}</small>
         <h3>${project.title}</h3>
-        <p class="project-description" style="margin:8px 0 0;color:#aab8d0;font-size:13px;line-height:1.6;">${project.description || "A creative project from my portfolio."}</p>
+        <p class="project-description" style="margin:8px 0 0;color:#aab8d0;font-size:13px;line-height:1.7;">
+          ${project.description}
+        </p>
       </div>
     </article>
   `;
@@ -122,6 +139,8 @@ function createProjectCard(project) {
 ========================================= */
 
 function renderProjects(list) {
+  if (!gallery) return;
+
   if (!list.length) {
     gallery.innerHTML = `
       <p class="empty-state">No projects found.</p>
@@ -155,13 +174,13 @@ function renderServiceGallery(categories) {
 function openService(serviceKey) {
   const service = services[serviceKey];
 
-  if (!service) return;
+  if (!service || !galleryTitle || !workSection) return;
 
   currentService = serviceKey;
 
   galleryTitle.textContent = service.title;
 
-  toolbar.classList.add("service-gallery-active");
+  document.querySelector(".gallery-toolbar")?.classList.add("service-gallery-active");
   workSection.classList.add("service-gallery-active");
 
   if (filterBar) {
@@ -184,32 +203,36 @@ function openService(serviceKey) {
    BACK TO SERVICES
 ========================================= */
 
-backButton.addEventListener("click", () => {
-  currentService = null;
+if (backButton) {
+  backButton.addEventListener("click", () => {
+    currentService = null;
 
-  galleryTitle.textContent = "All Creative Work";
+    if (galleryTitle) {
+      galleryTitle.textContent = "All Creative Work";
+    }
 
-  toolbar.classList.remove("service-gallery-active");
-  workSection.classList.remove("service-gallery-active");
+    document.querySelector(".gallery-toolbar")?.classList.remove("service-gallery-active");
+    workSection?.classList.remove("service-gallery-active");
 
-  if (filterBar) {
-    filterBar.style.display = "flex";
-  }
+    if (filterBar) {
+      filterBar.style.display = "flex";
+    }
 
-  renderGallery("all");
+    renderGallery("all");
 
-  document.querySelectorAll(".filter").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.filter === "all"
-    );
+    document.querySelectorAll(".filter").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.filter === "all"
+      );
+    });
+
+    document.querySelector(".hero-stats")?.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
   });
-
-  document.querySelector(".hero-stats").scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-});
+}
 
 /* =========================================
    CLICKABLE SERVICE CARDS
@@ -250,8 +273,8 @@ document.querySelectorAll(".filter").forEach(button => {
   button.addEventListener("click", () => {
     currentService = null;
 
-    toolbar.classList.remove("service-gallery-active");
-    workSection.classList.remove("service-gallery-active");
+    document.querySelector(".gallery-toolbar")?.classList.remove("service-gallery-active");
+    workSection?.classList.remove("service-gallery-active");
 
     if (filterBar) {
       filterBar.style.display = "flex";
@@ -265,41 +288,153 @@ document.querySelectorAll(".filter").forEach(button => {
 
     renderGallery(button.dataset.filter);
 
-    galleryTitle.textContent =
-      button.dataset.filter === "all"
-        ? "All Creative Work"
-        : labels[button.dataset.filter];
+    if (galleryTitle) {
+      galleryTitle.textContent =
+        button.dataset.filter === "all"
+          ? "All Creative Work"
+          : labels[button.dataset.filter];
+    }
   });
 });
 
 /* =========================================
-   OPEN PROJECTS
+   PROJECT IMAGE & VIDEO POPUP
 ========================================= */
 
-gallery.addEventListener("click", event => {
-  const button = event.target.closest("[data-open]");
+const previewModal = document.createElement("div");
 
-  if (!button) return;
+previewModal.id = "project-preview-modal";
 
-  if (button.dataset.type === "image") {
-    window.open(
-      button.dataset.open,
-      "_blank",
-      "noopener"
-    );
+previewModal.style.cssText = `
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(3,8,22,0.94);
+  backdrop-filter:blur(12px);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+`;
+
+previewModal.innerHTML = `
+  <button id="preview-close" aria-label="Close preview"
+    style="position:absolute;top:20px;right:25px;
+    width:46px;height:46px;border-radius:50%;
+    border:1px solid #52617d;background:#14213a;
+    color:white;font-size:28px;cursor:pointer;z-index:2;">
+    &times;
+  </button>
+
+  <div id="preview-content"
+    style="width:100%;height:100%;display:flex;
+    align-items:center;justify-content:center;">
+  </div>
+`;
+
+document.body.appendChild(previewModal);
+
+function closeProjectPreview() {
+  const content = document.querySelector("#preview-content");
+
+  content.querySelectorAll("video").forEach(video => {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+  });
+
+  content.innerHTML = "";
+  previewModal.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+function openProjectPreview(src, type, title) {
+  const content = document.querySelector("#preview-content");
+
+  content.innerHTML = "";
+
+  if (type === "image") {
+    const img = document.createElement("img");
+
+    img.src = src;
+    img.alt = title;
+
+    img.style.cssText = `
+      max-width:95%;
+      max-height:90vh;
+      object-fit:contain;
+      border-radius:12px;
+      box-shadow:0 20px 70px rgba(0,0,0,.5);
+    `;
+
+    img.onerror = () => {
+      img.alt = "Image could not be loaded. Please check the image filename.";
+    };
+
+    content.appendChild(img);
+
   } else {
-    const video = [...gallery.querySelectorAll("video")].find(
-      item => item.getAttribute("src") === button.dataset.open
+    const video = document.createElement("video");
+
+    video.src = src;
+    video.controls = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.preload = "auto";
+
+    video.style.cssText = `
+      max-width:95%;
+      max-height:85vh;
+      width:100%;
+      border-radius:12px;
+      background:#000;
+    `;
+
+    content.appendChild(video);
+
+    video.play().catch(() => {
+      // Visitor can press Play if autoplay is blocked.
+    });
+  }
+
+  previewModal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+if (gallery) {
+  gallery.addEventListener("click", event => {
+    const button = event.target.closest("[data-open]");
+
+    if (!button) return;
+
+    event.preventDefault();
+
+    const card = button.closest(".project-card");
+    const title = card?.querySelector("h3")?.textContent || "Project";
+
+    openProjectPreview(
+      button.dataset.open,
+      button.dataset.type,
+      title
     );
+  });
+}
 
-    if (video) {
-      video.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+document.querySelector("#preview-close").addEventListener(
+  "click",
+  closeProjectPreview
+);
 
-      video.focus();
-    }
+previewModal.addEventListener("click", event => {
+  if (event.target === previewModal) {
+    closeProjectPreview();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" &&
+      previewModal.style.display === "flex") {
+    closeProjectPreview();
   }
 });
 
@@ -310,7 +445,6 @@ gallery.addEventListener("click", event => {
 document.querySelectorAll(
   ".skill-chips span, .tool-logo"
 ).forEach(item => {
-
   item.addEventListener("touchstart", () => {
     item.classList.add("is-touched");
   }, { passive: true });
@@ -329,28 +463,33 @@ document.querySelectorAll(
 const nav = document.querySelector(".nav");
 const toggle = document.querySelector(".menu-toggle");
 
-toggle.addEventListener("click", () => {
-  const open = nav.classList.toggle("open");
+if (nav && toggle) {
+  toggle.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
 
-  toggle.setAttribute(
-    "aria-expanded",
-    String(open)
-  );
-});
-
-nav.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    nav.classList.remove("open");
-    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute(
+      "aria-expanded",
+      String(open)
+    );
   });
-});
+
+  nav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
 
 /* =========================================
    FOOTER YEAR
 ========================================= */
 
-document.querySelector("#year").textContent =
-  new Date().getFullYear();
+const yearElement = document.querySelector("#year");
+
+if (yearElement) {
+  yearElement.textContent = new Date().getFullYear();
+}
 
 /* =========================================
    VISITOR ID
@@ -411,36 +550,37 @@ async function refreshCommunity() {
       "stats?visitorId=" + encodeURIComponent(visitorId())
     );
 
-    document.querySelector("#view-count").textContent =
-      Number(data.views || 0).toLocaleString();
+    const viewCount = document.querySelector("#view-count");
+    const likeCount = document.querySelector("#like-count");
+    const commentCount = document.querySelector("#comment-count");
+    const likeButton = document.querySelector("#like-button");
 
-    document.querySelector("#like-count").textContent =
-      Number(data.likes || 0).toLocaleString();
+    if (viewCount) viewCount.textContent = Number(data.views || 0).toLocaleString();
+    if (likeCount) likeCount.textContent = Number(data.likes || 0).toLocaleString();
+    if (commentCount) commentCount.textContent = Number(data.comments || 0).toLocaleString();
 
-    document.querySelector("#comment-count").textContent =
-      Number(data.comments || 0).toLocaleString();
+    if (likeButton) {
+      likeButton.classList.toggle("liked", !!data.liked);
 
-    document.querySelector("#like-button").classList.toggle(
-      "liked",
-      !!data.liked
-    );
-
-    document.querySelector("#like-button b").textContent =
-      data.liked ? "Liked" : "Like this portfolio";
+      const buttonText = likeButton.querySelector("b");
+      if (buttonText) {
+        buttonText.textContent = data.liked ? "Liked" : "Like this portfolio";
+      }
+    }
 
     const list = document.querySelector("#comments-list");
 
-    list.innerHTML = data.recentComments?.length
-      ? data.recentComments.map(comment => `
-          <article class="comment">
-            <b>${escapeHTML(comment.name)}</b>
-            <time>
-              ${new Date(comment.created_at).toLocaleDateString()}
-            </time>
-            <p>${escapeHTML(comment.comment)}</p>
-          </article>
-        `).join("")
-      : '<p class="muted">Be the first to leave a comment.</p>';
+    if (list) {
+      list.innerHTML = data.recentComments?.length
+        ? data.recentComments.map(comment => `
+            <article class="comment">
+              <b>${escapeHTML(comment.name)}</b>
+              <time>${new Date(comment.created_at).toLocaleDateString()}</time>
+              <p>${escapeHTML(comment.comment)}</p>
+            </article>
+          `).join("")
+        : '<p class="muted">Be the first to leave a comment.</p>';
+    }
 
   } catch {
     [
@@ -448,11 +588,16 @@ async function refreshCommunity() {
       "#like-count",
       "#comment-count"
     ].forEach(selector => {
-      document.querySelector(selector).textContent = "—";
+      const element = document.querySelector(selector);
+      if (element) element.textContent = "—";
     });
 
-    document.querySelector("#comments-list").innerHTML =
-      '<p class="muted">Engagement counters will activate after Cloudflare D1 is connected.</p>';
+    const list = document.querySelector("#comments-list");
+
+    if (list) {
+      list.innerHTML =
+        '<p class="muted">Engagement counters will activate after Cloudflare D1 is connected.</p>';
+    }
   }
 }
 
@@ -477,13 +622,11 @@ async function refreshCommunity() {
    LIKE BUTTON
 ========================================= */
 
-document.querySelector("#like-button").addEventListener(
-  "click",
-  async () => {
+const likeButton = document.querySelector("#like-button");
 
-    const button = document.querySelector("#like-button");
-
-    button.disabled = true;
+if (likeButton) {
+  likeButton.addEventListener("click", async () => {
+    likeButton.disabled = true;
 
     try {
       await api("like", {
@@ -493,29 +636,31 @@ document.querySelector("#like-button").addEventListener(
         })
       });
 
-      document.querySelector("#like-note").textContent =
-        "Thanks for supporting my work!";
+      const note = document.querySelector("#like-note");
+      if (note) note.textContent = "Thanks for supporting my work!";
 
       await refreshCommunity();
 
     } catch {
-      document.querySelector("#like-note").textContent =
-        "Likes will activate after the site database is connected.";
+      const note = document.querySelector("#like-note");
+      if (note) {
+        note.textContent = "Likes will activate after the site database is connected.";
+      }
 
     } finally {
-      button.disabled = false;
+      likeButton.disabled = false;
     }
-  }
-);
+  });
+}
 
 /* =========================================
    COMMENT FORM
 ========================================= */
 
-document.querySelector("#comment-form").addEventListener(
-  "submit",
-  async event => {
+const commentForm = document.querySelector("#comment-form");
 
+if (commentForm) {
+  commentForm.addEventListener("submit", async event => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -533,20 +678,24 @@ document.querySelector("#comment-form").addEventListener(
         body: JSON.stringify(body)
       });
 
-      message.textContent =
-        result.message ||
-        "Thanks! Your comment was submitted for review.";
+      if (message) {
+        message.textContent =
+          result.message ||
+          "Thanks! Your comment was submitted for review.";
+      }
 
       form.reset();
 
       await refreshCommunity();
 
     } catch {
-      message.textContent =
-        "Comments will activate after Cloudflare D1 is connected.";
+      if (message) {
+        message.textContent =
+          "Comments will activate after Cloudflare D1 is connected.";
+      }
     }
-  }
-);
+  });
+}
 
 /* =========================================
    INITIAL GALLERY
@@ -613,6 +762,8 @@ renderGallery("all");
   }
 
   function animateProjects() {
+    if (!gallery) return;
+
     gallery.querySelectorAll(".project-card").forEach((card, index) => {
       card.style.setProperty(
         "--card-delay",
@@ -705,7 +856,7 @@ renderGallery("all");
     portrait.style.setProperty("--shadow-y", "15px");
   }
 
-  visual.addEventListener("pointermove", (event) => {
+  visual.addEventListener("pointermove", event => {
     if (event.pointerType === "touch") return;
     updateTilt(event);
   });
