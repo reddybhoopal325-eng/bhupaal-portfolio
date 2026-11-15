@@ -1,4 +1,3 @@
-
 /* =========================================
    BHUPAAL REDDY PORTFOLIO
    Updated Gallery + Service Cards
@@ -7,6 +6,8 @@
 const projects = [
   {title:"Gym Poster",category:"photoshop",type:"image",src:"assets/works/photoshop/gym-poster.webp"},
   {title:"Creative Poster",category:"photoshop",type:"image",src:"assets/works/photoshop/creative-poster.webp"},
+  {title:"Nike Shoe Poster",category:"photoshop",type:"image",src:"assets/works/photoshop/shoe%20poster.jpg"},
+
   {title:"Food Flyer",category:"illustrator",type:"image",src:"assets/works/illustrator/food-flyer.webp"},
   {title:"ID Card — Front",category:"illustrator",type:"image",src:"assets/works/illustrator/id-card-front.webp"},
   {title:"ID Card — Back",category:"illustrator",type:"image",src:"assets/works/illustrator/id-card-back.webp"},
@@ -18,6 +19,7 @@ const projects = [
   {title:"Trifold Brochure",category:"illustrator",type:"image",src:"assets/works/illustrator/trifold-brochure.webp"},
   {title:"Visiting Card — 01",category:"illustrator",type:"image",src:"assets/works/illustrator/visiting-card-01.webp"},
   {title:"Visiting Card — 02",category:"illustrator",type:"image",src:"assets/works/illustrator/visiting-card-02.webp"},
+
   {title:"History of Animation",category:"after-effects",type:"video",src:"assets/works/after-effects/history-of-animation.mp4"},
   {title:"Task Flow",category:"after-effects",type:"video",src:"assets/works/after-effects/task-flow.mp4"},
   {title:"Video Edit — 01",category:"premiere-pro",type:"video",src:"assets/works/premiere-pro/video-edit-01.mp4"},
@@ -143,7 +145,6 @@ function renderServiceGallery(categories) {
 
   renderProjects(list);
 }
-
 /* =========================================
    OPEN SELECTED SERVICE
 ========================================= */
@@ -160,7 +161,6 @@ function openService(serviceKey) {
   toolbar.classList.add("service-gallery-active");
   workSection.classList.add("service-gallery-active");
 
-  // Hide software filters while viewing a service
   if (filterBar) {
     filterBar.style.display = "none";
   }
@@ -189,7 +189,6 @@ backButton.addEventListener("click", () => {
   toolbar.classList.remove("service-gallery-active");
   workSection.classList.remove("service-gallery-active");
 
-  // Restore software filters
   if (filterBar) {
     filterBar.style.display = "flex";
   }
@@ -251,7 +250,6 @@ document.querySelectorAll(".filter").forEach(button => {
     toolbar.classList.remove("service-gallery-active");
     workSection.classList.remove("service-gallery-active");
 
-    // Show filters again
     if (filterBar) {
       filterBar.style.display = "flex";
     }
@@ -385,7 +383,6 @@ const api = async (path, options = {}) => {
 
   return response.json();
 };
-
 /* =========================================
    SAFE HTML
 ========================================= */
@@ -564,7 +561,6 @@ renderGallery("all");
 
   if (reduceMotion) return;
 
-  // Sections that animate when they enter the screen
   const selectors = [
     ".hero-copy",
     ".hero-visual",
@@ -592,7 +588,6 @@ renderGallery("all");
     }
   });
 
-  // Reveal sections while scrolling
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -613,7 +608,6 @@ renderGallery("all");
     });
   }
 
-  // Animate project cards after every gallery update
   function animateProjects() {
     gallery.querySelectorAll(".project-card").forEach((card, index) => {
       card.style.setProperty(
@@ -637,7 +631,6 @@ renderGallery("all");
 
   animateProjects();
 
-  // Gentle portrait floating effect
   const portrait = document.querySelector(".hero-portrait");
   const glow = document.querySelector(".portrait-glow");
 
@@ -715,6 +708,3 @@ renderGallery("all");
 
   visual.addEventListener("pointerleave", resetTilt);
 })();
-
-
-
